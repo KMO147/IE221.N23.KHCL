@@ -7,7 +7,9 @@ pygame.init()
 window_size = (700, 700)
 screen = pygame.display.set_mode(window_size)
 
-board = Board(window_size[0], window_size[1])
+font = pygame.font.Font(None, 50)
+
+board = Board(window_size[0], window_size[1], font)
 
 running = True
 while running:
@@ -16,7 +18,7 @@ while running:
 		if event.type == pygame.QUIT:
 			running = False
 
-	screen.fill('white')
+	screen.fill((63,63,63))
 	board.draw(screen)
 	pygame.display.update()
 

@@ -7,13 +7,16 @@ from module.pieces.Knight import Knight
 from module.pieces.Queen import Queen
 from module.pieces.King import King
 from module.pieces.Pawn import Pawn
+from module.Player import Player
 
 class Board:
-	def __init__(self, width, height):
+	def __init__(self, width, height, font):
 		self.width = width
 		self.height = height
 		self.square_width = width // 14
 		self.square_height = height // 14
+		self.font = font
+		self.teams = ['r', 'b', 'y', 'g']
 
 		self.board_matrix = [
 			[' ', ' ', ' ', 'yR', 'yN', 'yB', 'yK', 'yQ', 'yB', 'yN', 'yR', ' ', ' ', ' '],
@@ -27,12 +30,13 @@ class Board:
 			['bB', 'bP', '', '', '', '', '', '', '', '', '', '', 'gP', 'gB'],
 			['bN', 'bP', '', '', '', '', '', '', '', '', '', '', 'gP', 'gN'],
 			['bR', 'bP', '', '', '', '', '', '', '', '', '', '', 'gP', 'gR'],
-			[' ', ' ', ' ', '', '', '', '', '', '', '', '', '  ', '  ', '  '],
+			[' ', ' ', ' ', '', '', '', '', '', '', '', '', ' ', ' ', ' '],
 			[' ', ' ', ' ', 'rP', 'rP', 'rP', 'rP', 'rP', 'rP', 'rP', 'rP', ' ', ' ', ' '],
 			[' ', ' ', ' ', 'rR', 'rN', 'rB', 'rQ', 'rK', 'rB', 'rN', 'rR', ' ', ' ', ' '],
 		]
 
 		self.squares = self.generate_squares()
+		self.players = self.generate_players()
 		self.setup_board()
 
 
@@ -44,6 +48,11 @@ class Board:
 					output.append(Square(x, y, self.square_width, self.square_height))
 		return output
 
+	def generate_players(self):
+		output = []
+		for color in self.teams:
+			output.append(Player(color, self.square_width, self.square_height, self.font))
+		return output
 
 	def setup_board(self):
 		for y, row in enumerate(self.board_matrix):
@@ -83,3 +92,5 @@ class Board:
 	def draw(self, screen):
 		for square in self.squares:
 			square.draw(screen)
+		for player in self.players:
+			player.draw(screen)

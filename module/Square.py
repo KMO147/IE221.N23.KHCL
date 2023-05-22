@@ -12,7 +12,7 @@ class Square:
 		self.abs_pos = (self.abs_x, self.abs_y)
 		self.pos = (x, y)
 		self.color = 'light' if (x + y) % 2 == 0 else 'dark'
-		self.draw_color = (241, 211, 170) if self.color == 'light' else (180, 126, 82)
+		self.draw_color = 'white' if self.color == 'light' else 'gray'
 		self.occupying_piece = None
 		
 		self.rect = pygame.Rect(self.abs_x, self.abs_y, self.width, self.height)
