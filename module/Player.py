@@ -6,7 +6,7 @@ class Player:
 		self.width = width
 		self.height = height
 		self.score = 0
-		self.draw_score = font.render(str(self.score), True, (0,0,0))
+		self.font = font
 
 		if self.color == 'r':
 			self.rect = pygame.Rect(13 * width, 13 * height, width, height)
@@ -24,6 +24,7 @@ class Player:
 	def draw(self, screen):
 		pygame.draw.rect(screen, self.draw_color, self.rect)
 
+		self.draw_score = self.font.render(str(self.score), True, (0,0,0))
 		centering_rect = self.draw_score.get_rect()
 		centering_rect.center = self.rect.center
 		screen.blit(self.draw_score, centering_rect.topleft)
