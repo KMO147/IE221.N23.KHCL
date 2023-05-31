@@ -3,6 +3,8 @@ import pygame
 from module.Piece import Piece
 
 class Rook(Piece):
+	'''lớp Rook dùng để mô tả quân xe bao gồm vị trí, thuộc đội màu nào, hình ảnh 
+	và kí hiệu, mô tả cách di chuyển của quân xe'''
 	def __init__(self, pos, color, board):
 		super().__init__(pos, color, board)
 
@@ -14,6 +16,8 @@ class Rook(Piece):
 
 
 	def get_possible_moves(self, board):
+		'''Input là bàn cờ, 
+		Output là các mảng các hướng đi, mỗi mảng là các nước đi có thể của xe'''
 		output = []
 
 		moves_north = []

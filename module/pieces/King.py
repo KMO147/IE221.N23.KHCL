@@ -3,6 +3,8 @@ import pygame
 from module.Piece import Piece
 
 class King(Piece):
+	'''lớp King dùng để mô tả quân vua bao gồm vị trí, thuộc đội màu nào, hình ảnh 
+	và kí hiệu, mô tả cách di chuyển của quân vua'''
 	def __init__(self, pos, color, board):
 		super().__init__(pos, color, board)
 
@@ -14,6 +16,8 @@ class King(Piece):
 
 
 	def get_possible_moves(self, board):
+		'''Input là bàn cờ,
+		Output là các mảng các đối tượng Square có thể đi của quân vua bao gồm đi xung quanh và castle'''
 		output = []
 		moves = [
 			(0,-1), # north
@@ -36,12 +40,36 @@ class King(Piece):
 				new_pos not in self.restricted_move
 			):
 				output.append([board.get_square_from_pos(new_pos)])
+
+		if self.color == 'r':
+			if self.can_castle(board) == 'queenside':
+				output.append([board.get_square_from_pos((self.x - 2, self.y))])
+			if self.can_castle(board) == 'kingside':
+				output.append([board.get_square_from_pos((self.x + 2, self.y))])
+		elif self.color == 'b':
+			if self.can_castle(board) == 'queenside':
+				output.append([board.get_square_from_pos((self.x, self.y + 2))])
+			if self.can_castle(board) == 'kingside':
+				output.append([board.get_square_from_pos((self.x, self.y - 2))])
+		elif self.color == 'y':
+			if self.can_castle(board) == 'queenside':
+				output.append([board.get_square_from_pos((self.x + 2, self.y))])
+			if self.can_castle(board) == 'kingside':
+				output.append([board.get_square_from_pos((self.x - 2, self.y))])
+		elif self.color == 'g':
+			if self.can_castle(board) == 'queenside':
+				output.append([board.get_square_from_pos((self.x, self.y - 2))])
+			if self.can_castle(board) == 'kingside':
+				output.append([board.get_square_from_pos((self.x, self.y + 2))])
+
 		return output
 
 
 	def can_castle(self, board):
+		'''Input là bàn cờ,
+		Output là 'queenside' hoặc 'kingside' thể hiện quân vua có thể nhập thành
+		theo phía quân hậu hoặc phía quân vua'''
 		if not self.has_moved:
-
 			if self.color == 'r':
 				queenside_rook = board.get_piece_from_pos((3, 13))
 				kingside_rook = board.get_piece_from_pos((10, 13))
@@ -89,31 +117,3 @@ class King(Piece):
 					if not kingside_rook.has_moved:
 						if [board.get_piece_from_pos((13, i)) for i in range(8, 10)] == [None, None]:
 							return 'kingside'
-
-
-	def get_valid_moves(self, board):
-		output = []
-		for square in self.get_moves(board):
-			if not board.is_in_check(self.color, board_change=[self.pos, square.pos]):
-				output.append(square)
-		if self.color == 'r':
-			if self.can_castle(board) == 'queenside':
-				output.append(board.get_square_from_pos((self.x - 2, self.y)))
-			if self.can_castle(board) == 'kingside':
-				output.append(board.get_square_from_pos((self.x + 2, self.y)))
-		elif self.color == 'b':
-			if self.can_castle(board) == 'queenside':
-				output.append(board.get_square_from_pos((self.x, self.y + 2)))
-			if self.can_castle(board) == 'kingside':
-				output.append(board.get_square_from_pos((self.x, self.y - 2)))
-		elif self.color == 'y':
-			if self.can_castle(board) == 'queenside':
-				output.append(board.get_square_from_pos((self.x + 2, self.y)))
-			if self.can_castle(board) == 'kingside':
-				output.append(board.get_square_from_pos((self.x - 2, self.y)))
-		elif self.color == 'g':
-			if self.can_castle(board) == 'queenside':
-				output.append(board.get_square_from_pos((self.x, self.y - 2)))
-			if self.can_castle(board) == 'kingside':
-				output.append(board.get_square_from_pos((self.x, self.y + 2)))
-		return output

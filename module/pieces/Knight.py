@@ -3,6 +3,8 @@ import pygame
 from module.Piece import Piece
 
 class Knight(Piece):
+	'''lớp Knight dùng để mô tả quân mã bao gồm vị trí, thuộc đội màu nào, hình ảnh 
+	và kí hiệu, mô tả cách di chuyển của quân mã'''
 	def __init__(self, pos, color, board):
 		super().__init__(pos, color, board)
 
@@ -14,6 +16,8 @@ class Knight(Piece):
 
 
 	def get_possible_moves(self, board):
+		'''Input là bàn cờ,
+		Output là các mảng các nước đi có thể của quân mã'''
 		output = []
 		moves = [
 			(1, -2),

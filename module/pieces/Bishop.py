@@ -3,6 +3,8 @@ import pygame
 from module.Piece import Piece
 
 class Bishop(Piece):
+	'''lớp Bishop dùng để mô tả quân tượng bao gồm vị trí, thuộc đội màu nào, hình ảnh 
+	và kí hiệu, mô tả cách di chuyển của quân tượng'''
 	def __init__(self, pos, color, board):
 		super().__init__(pos, color, board)
 
@@ -14,6 +16,8 @@ class Bishop(Piece):
 
 
 	def get_possible_moves(self, board):
+		'''Input là bàn cờ,
+		Output là các mảng các hướng đi, mỗi mảng là các nước đi có thể của quân tượng'''
 		output = []
 
 		moves_ne = []

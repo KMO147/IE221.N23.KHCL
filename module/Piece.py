@@ -1,6 +1,9 @@
 import pygame
 
 class Piece:
+	'''lớp Piece dùng để mô tả quân cờ bao gồm vị trí, thuộc đội màu nào, 
+	đã di chuyển hay chưa, mô tả cách di chuyển của quân cờ, di chuyển quân cờ
+	và đổi màu quân cờ thành xám khi bị chiếu tướng'''
 	def __init__(self, pos, color, board):
 		self.pos = pos
 		self.x = pos[0]
@@ -15,7 +18,10 @@ class Piece:
 								(13,0), (13,1), (13,2), (13,11), (13,12), (13,13)]
 
 	def move(self, board, square, force=False):
-
+		'''Input là bàn cờ, ô vương mà quân cờ di chuyển 
+		và 1 biến force để xác định đây là nước nhập thành, 
+		Output là thay đổi vị trí quân cờ và trả về True hoặc False 
+		để xác định quân cờ đã di chuyển hay chưa'''
 		for i in board.squares:
 			i.highlight = False
 
@@ -23,6 +29,7 @@ class Piece:
 			prev_square = board.get_square_from_pos(self.pos)
 			prev_piece = board.get_piece_from_pos(self.pos)
 			
+			# Cộng điểm cho người chơi khi đi nước ăn quân đối thủ
 			captured_piece = square.occupying_piece
 			if captured_piece is not None and captured_piece.color != 'gr':
 				if captured_piece.notation == 'P':
@@ -38,22 +45,23 @@ class Piece:
 					board.get_player_from_color(self.color).score += 5
 				elif captured_piece.notation == 'N':
 					board.get_player_from_color(self.color).score += 3
-				elif board.is_in_checkmate(captured_piece.color):
-					board.get_player_from_color(self.color).score += 20
+				board.get_player_from_color(self.color).captured_piece.append(captured_piece)
 
+			# Cập nhật vị trí quân cờ
 			self.pos, self.x, self.y = square.pos, square.x, square.y
 			prev_square.occupying_piece = None
 			square.occupying_piece = self
 			board.selected_piece = None
+			# Cập nhật biến cờ xác nhận quân cờ đã di chuyển ít nhất 1 lần rồi
 			self.has_moved = True
 
-			# Pawn promotion
+			# Quân tốt thăng cấp thành quân hậu
 			if self.notation == 'P':
 				if (self.y == 6 and self.color == 'r') or (self.y == 7 and self.color == 'y') or (self.x == 7 and self.color == 'b') or (self.x == 6 and self.color == 'g'):
 					from module.pieces.Queen import Queen
 					square.occupying_piece = Queen((self.x, self.y), self.color, board, promoted = True)
 
-			# Move rook if king castles
+			# Di chuyển quân xe khi quân vua nhập thành
 			if self.notation == 'K':
 				if self.color == 'r':
 					if prev_square.x - self.x == 2:
@@ -88,11 +96,13 @@ class Piece:
 			board.selected_piece = None
 			return False
 
-
+	# Đúng cho mọi quân cờ trừ quân tốt
 	def get_moves(self, board):
+		'''Input là bàn cờ, 
+		Output là các đối tượng Square là các nước đi có thể của quân cờ'''
 		output = []
-		for direction in self.get_possible_moves(board):
-			for square in direction:
+		for move in self.get_possible_moves(board):
+			for square in move:
 				if square.occupying_piece is not None:
 					if square.occupying_piece.color == self.color:
 						break
@@ -105,6 +115,8 @@ class Piece:
 
 
 	def get_valid_moves(self, board):
+		'''Input là bàn cờ, 
+		Output là các đối tượng Square là các nước đi hợp lệ của quân cờ'''
 		output = []
 		for square in self.get_moves(board):
 			if not board.is_in_check(self.color, board_change=[self.pos, square.pos]):
@@ -112,12 +124,16 @@ class Piece:
 		return output
 
 
-	# True for all pieces except pawn
+	# Đúng cho mọi quân cờ trừ quân tốt
 	def attacking_squares(self, board):
+		'''Input là bàn cờ, 
+		Output là các đối tượng Square là các nước tấn công vào quân cờ đối thủ của quân cờ'''
 		return self.get_moves(board)
 
 
 	def lose(self, board):
+		'''Input là bàn cờ, thực hiện đổi màu và ảnh quân cờ của người chơi bị chiếu tướng,
+		Output không trả về gì cả'''
 		img_path = 'images/' + self.color + self.notation + '.png'
 		self.img = pygame.image.load(img_path)
 		self.img = pygame.transform.scale(self.img, (board.square_width - 10, board.square_height - 10))

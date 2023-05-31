@@ -4,7 +4,7 @@ from module.Board import Board
 
 pygame.init()
 
-window_size = (700, 700)
+window_size = (700, 750)
 screen = pygame.display.set_mode(window_size)
 
 font = pygame.font.Font(None, 50)
@@ -22,11 +22,15 @@ while running:
 			if event.button == 1:
 				board.handle_click(mouse_x, mouse_y)
 
-	if board.is_end():
-		print("Kết thúc game")
+		if board.is_end():
+			board.show_winner()
+
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_SPACE:
+				board.reset()
 
 	screen.fill((63,63,63))
-	board.draw(screen, mouse_x, mouse_y)
+	board.draw(screen)
 	pygame.display.update()
 
 pygame.quit()

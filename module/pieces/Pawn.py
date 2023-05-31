@@ -3,6 +3,8 @@ import pygame
 from module.Piece import Piece
 
 class Pawn(Piece):
+	'''lớp Pawn dùng để mô tả quân tốt bao gồm vị trí, thuộc đội màu nào, hình ảnh 
+	và kí hiệu, mô tả cách di chuyển của quân tốt'''
 	def __init__(self, pos, color, board):
 		super().__init__(pos, color, board)
 
@@ -14,10 +16,12 @@ class Pawn(Piece):
 
 
 	def get_possible_moves(self, board):
+		'''Input là bàn cờ,
+		Output là các mảng các hướng đi, mỗi mảng là các nước đi có thể của quân tốt'''
 		output = []
 		moves = []
 
-		# move forward
+		# di chuyển về phía trước
 		if self.color == 'r':
 			moves.append((0, -1))
 			if not self.has_moved:
@@ -46,6 +50,8 @@ class Pawn(Piece):
 
 
 	def get_moves(self, board):
+		'''Input là bàn cờ,
+		Output là trả về các đối tượng Square có đi được của quân tốt bao gồm đi thẳng và đi chéo khi ăn quân'''
 		output = []
 		for square in self.get_possible_moves(board):
 			if square.occupying_piece != None:
@@ -120,8 +126,9 @@ class Pawn(Piece):
 
 
 	def attacking_squares(self, board):
+		'''Input là bàn cờ,
+		Output là mảng các nước đi chéo khi ăn quân đối phương của quân tốt'''
 		moves = self.get_moves(board)
-		# return the diagonal moves
 		if self.color == 'r' or self.color == 'y':
 			return [i for i in moves if i.x != self.x]
 		else:
