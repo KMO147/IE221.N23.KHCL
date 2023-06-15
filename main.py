@@ -23,6 +23,7 @@ while running:
 				board.handle_click(mouse_x, mouse_y)
 
 		if board.is_end():
+			board.ranking_player()
 			board.show_winner()
 
 		if event.type == pygame.KEYDOWN:

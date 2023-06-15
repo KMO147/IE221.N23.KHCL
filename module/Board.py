@@ -241,23 +241,24 @@ class Board:
 				if piece.notation == 'K' and piece.color == color:
 					king = piece
 
-		if king.get_valid_moves(self) == [] and not self.can_protect_king(pieces, color):
-			if self.is_in_check(color):
-				# cộng điểm cho người chơi khi chiếu tướng
-				self.get_player_from_color(self.get_previous_turn()).score += 20
+		if king.get_valid_moves(self) == []:
+			if not self.can_protect_king(pieces, color):
+				if self.is_in_check(color):
+					# cộng điểm cho người chơi khi chiếu tướng
+					self.get_player_from_color(self.get_previous_turn()).score += 20
 
-				if self.turn == color:
-					self.turn = self.get_next_turn()
-					self.message = self.decode_teams[self.turn] + ' turn'
-				# Đổi màu của quân cờ thành xám
-				for piece in pieces:
-					if piece is not None:
-						if piece.color == color:
-							piece.color = 'gr'
-							piece.lose(self)
-				# Loại bỏ team bị chiếu tướng
-				self.teams.remove(color)
-				output = True
+					if self.turn == color:
+						self.turn = self.get_next_turn()
+						self.message = self.decode_teams[self.turn] + ' turn'
+					# Đổi màu của quân cờ thành xám
+					for piece in pieces:
+						if piece is not None:
+							if piece.color == color:
+								piece.color = 'gr'
+								piece.lose(self)
+					# Loại bỏ team bị chiếu tướng
+					self.teams.remove(color)
+					output = True
 
 		return output
 
