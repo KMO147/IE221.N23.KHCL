@@ -288,7 +288,7 @@ class Board:
 		for team in self.teams:
 			self.is_in_checkmate(team)
 		if len(self.teams) == 2:
-			if abs(self.get_player_from_color(self.teams[0]).score - self.get_player_from_color(self.teams[1]).score) > 20:
+			if abs(self.players[0].score - self.players[1].score) > 20:
 				output = True
 		elif len(self.teams) == 1:
 			output = True
